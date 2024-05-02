@@ -17,7 +17,7 @@ See if the program is numerically stable for several days of simulated time.
 If the satellite is at (X,Y,Z) coords with origin at the center of
 the earth, Z-axis points north, X-axis points out at 0&deg; longitude
     - longitude = math.Atan2(Y, X)
-    - latitude = math.Atan2(Z, &#8730;(X<sup>2</sup> + Y<sup>2</sup>)
+    - latitude = math.Atan2(Z, &#8730;(X<sup>2</sup> + Y<sup>2</sup>))&br;
 Using Go's `math.Atan2()` should get positive latitude in northern hemisphere,
 negative latitude in southern hemisphere.
     - [code](longlat.go)
