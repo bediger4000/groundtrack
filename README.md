@@ -14,6 +14,13 @@ but the earth rotates underneath it.
 See if the program is numerically stable for several days of simulated time.
     - [code](circularorbit.go)
 2. Figure out how to map (X,Y,Z) orbital positions to longitude/latitude
+If the satellite is at (X,Y,Z) coords with origin at the center of
+the earth, Z-axis points north, X-axis points out at 0&deg; longitude
+    - longitude = `math.Atan2(Y, X)`
+    - latitude = `math.Atan2(Z, &#8730;(X<sup>2</sup> + Y<sup>2</sup>)`
+Using Go's `math.Atan2()` should get positive latitude in northern hemisphere,
+negative latitude in southern hemisphere.
+    - [code](longlat.go)
 3. Produce an image of a flattned-out ground track on a non-rotating earth.
 May (longitude, latitude) to (X,Y) coordinates in the image.
 4. Figure out how to produce a [Hammer projection]() of the ground track
