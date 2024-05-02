@@ -20,12 +20,12 @@ func main() {
 	Y := 0.0
 	Z := 0.0
 
-	elevation := 66.5 / 360. * 2.0 * math.Pi
+	inclination := (66.5 / 360.) * 2.0 * math.Pi
 
 	// Velocities in meters/second
 	Vx := 0.0
-	Vy := 7012.6 * math.Cos(elevation)
-	Vz := 7012.6 * math.Sin(elevation)
+	Vy := 7012.6 * math.Cos(inclination)
+	Vz := 7012.6 * math.Sin(inclination)
 
 	GM1 := G * Mearth
 
