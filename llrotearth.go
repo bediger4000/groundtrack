@@ -84,11 +84,13 @@ type globeImage struct {
 	image   *image.Paletted
 	palette []color.Color
 	scale   float64
+	width   int
+	height  int
 }
 
 // makeMap creates a filled in *globalImage
 // from the shapefile named by fileName argument
-func makeMap(fileName string) (*globeImage, error) {
+func makeMap(width, height int, fileName string) (*globeImage, error) {
 	shape, err := shp.Open(fileName)
 	if err != nil {
 		return nil, err
@@ -102,12 +104,16 @@ func makeMap(fileName string) (*globeImage, error) {
 	pal = append(pal, image.Black) // 1
 	pal = append(pal, red)         // 2
 
-	img := image.NewPaletted(image.Rectangle{image.Point{0, 0}, image.Point{3600, 3600}}, pal)
+	img := image.NewPaletted(image.Rectangle{image.Point{0, 0}, image.Point{width, height}}, pal)
+
+	scale := float64(width) / 360.
 
 	gi := &globeImage{
 		image:   img,
 		palette: pal,
-		scale:   10.0,
+		scale:   scale,
+		width:   width,
+		height:  height,
 	}
 
 	for shape.Next() {
