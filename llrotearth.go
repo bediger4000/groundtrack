@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	img, err := makeMap(os.Args[1])
+	img, err := MakeMap(3600, 3600, os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,13 +47,13 @@ func main() {
 	var intervalCount int
 	dt := .250 // seconds
 
-	for t = 0.0; t <= 86400; t += dt {
+	for t = 0.0; t <= 86400.; t += dt {
 
 		r2 := X*X + Y*Y + Z*Z
 		r = math.Sqrt(r2)
 
 		if intervalCount%4 == 0 {
-			img.Point(X, Y, Z)
+			img.Point(X, Y, Z, t)
 		}
 		intervalCount++
 
@@ -88,9 +88,9 @@ type globeImage struct {
 	height  int
 }
 
-// makeMap creates a filled in *globalImage
+// MakeMap creates a filled in *globalImage
 // from the shapefile named by fileName argument
-func makeMap(width, height int, fileName string) (*globeImage, error) {
+func MakeMap(width, height int, fileName string) (*globeImage, error) {
 	shape, err := shp.Open(fileName)
 	if err != nil {
 		return nil, err
@@ -140,9 +140,12 @@ func makeMap(width, height int, fileName string) (*globeImage, error) {
 
 var rtod = 360. / (2. * math.Pi)
 
-func (gi *globeImage) Point(X, Y, Z float64) {
+func (gi *globeImage) Point(X, Y, Z, t float64) {
 	longitude := rtod * math.Atan2(Y, X)
 	latitude := rtod * math.Atan2(Z, math.Sqrt(X*X+Y*Y))
+	dlong := t * 0.004166
+	dlong = math.Remainder(dlong, 360.)
+	longitude = math.Remainder(longitude-dlong, 360)
 	gi.image.SetColorIndex(
 		int(gi.scale*(longitude+180.)),
 		int(gi.scale*(-latitude+180.)),
