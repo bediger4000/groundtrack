@@ -26,6 +26,7 @@ Map (longitude, latitude) to (X,Y) coordinates in the image.
     - [code](llearth.go)
 4. Produce an image of a flattened-out ground track on a rotating earth.
     - [code](llrotearth.go)
+    - Go's `math.Remainder(float64, float64)` pivotal
 5. Figure out how to produce a [Hammer projection]() of the ground track
 on a non-rotating earth.
 6. Include the effects of a rotating earth on the Hammer projection ground track
