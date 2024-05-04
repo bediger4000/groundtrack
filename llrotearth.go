@@ -5,6 +5,7 @@ package main
  */
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
@@ -17,7 +18,7 @@ import (
 
 func main() {
 
-	img, err := MakeMap(3600, 3600, os.Args[1])
+	img, err := MakeMap(3600, 1800, os.Args[1], true)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,13 +85,16 @@ type globeImage struct {
 	image   *image.Paletted
 	palette []color.Color
 	scale   float64
-	width   int
-	height  int
+	offsetX float64 // add to longitude
+	offsetY float64 // subtract latitude
 }
 
 // MakeMap creates a filled in *globalImage
 // from the shapefile named by fileName argument
-func MakeMap(width, height int, fileName string) (*globeImage, error) {
+func MakeMap(width, height int, fileName string, verbose bool) (*globeImage, error) {
+	if verbose {
+		fmt.Fprintf(os.Stderr, "Shape file %q\n", fileName)
+	}
 	shape, err := shp.Open(fileName)
 	if err != nil {
 		return nil, err
@@ -104,6 +108,9 @@ func MakeMap(width, height int, fileName string) (*globeImage, error) {
 	pal = append(pal, image.Black) // 1
 	pal = append(pal, red)         // 2
 
+	if verbose {
+		fmt.Fprintf(os.Stderr, "Creating image %d wide, %d high\n", width, height)
+	}
 	img := image.NewPaletted(image.Rectangle{image.Point{0, 0}, image.Point{width, height}}, pal)
 
 	scale := float64(width) / 360.
@@ -112,8 +119,11 @@ func MakeMap(width, height int, fileName string) (*globeImage, error) {
 		image:   img,
 		palette: pal,
 		scale:   scale,
-		width:   width,
-		height:  height,
+		offsetX: float64(width) / (2. * scale),
+		offsetY: float64(height) / (2. * scale),
+	}
+	if verbose {
+		gi.Describe(os.Stderr)
 	}
 
 	for shape.Next() {
@@ -123,8 +133,8 @@ func MakeMap(width, height int, fileName string) (*globeImage, error) {
 			pl := p.(*shp.PolyLine)
 			for _, pt := range pl.Points {
 				gi.image.SetColorIndex(
-					int(gi.scale*(pt.X+180.)),
-					int(gi.scale*(-pt.Y+180.)),
+					int(gi.scale*(pt.X+gi.offsetX)),
+					int(gi.scale*(gi.offsetY-pt.Y)),
 					1,
 				)
 			}
@@ -132,13 +142,13 @@ func MakeMap(width, height int, fileName string) (*globeImage, error) {
 	}
 
 	for x := 0.; x <= 360.0; x += 0.01 {
-		gi.image.SetColorIndex(int(gi.scale*x), int(gi.scale*180.), 2)
+		gi.image.SetColorIndex(int(gi.scale*x), int(gi.scale*gi.offsetY), 2)
 	}
 
 	return gi, nil
 }
 
-var rtod = 360. / (2. * math.Pi)
+var rtod = 360. / (2. * math.Pi) // radians to degrees multiplier
 
 func (gi *globeImage) Point(X, Y, Z, t float64) {
 	longitude := rtod * math.Atan2(Y, X)
@@ -147,8 +157,8 @@ func (gi *globeImage) Point(X, Y, Z, t float64) {
 	dlong = math.Remainder(dlong, 360.)
 	longitude = math.Remainder(longitude-dlong, 360)
 	gi.image.SetColorIndex(
-		int(gi.scale*(longitude+180.)),
-		int(gi.scale*(-latitude+180.)),
+		int(gi.scale*(longitude+gi.offsetX)),
+		int(gi.scale*(gi.offsetY-latitude)),
 		2,
 	)
 }
@@ -163,4 +173,9 @@ func (gi *globeImage) WriteImage(fout *os.File) {
 			Drawer:    nil,
 		},
 	)
+}
+func (gi *globeImage) Describe(fout *os.File) {
+	fmt.Fprintf(fout, "paletted image with %d colors\n", len(gi.palette))
+	fmt.Fprintf(fout, "input long/lat scaled by %.03f\n", gi.scale)
+	fmt.Fprintf(fout, "input long/lat offset by (%.03f, %.03f)\n", gi.offsetX, gi.offsetY)
 }
