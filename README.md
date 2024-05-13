@@ -20,6 +20,7 @@ the earth, Z-axis points north, X-axis points out at 0&deg; longitude
     - latitude = math.Atan2(Z, &#8730;(X<sup>2</sup> + Y<sup>2</sup>))
 Using Go's `math.Atan2()` should get positive latitude in northern hemisphere,
 negative latitude in southern hemisphere.
+Go's `math.Remainder()` worked to keep the longitude between -180&deg; and 180&deg;
     - [code](longlat.go)
 3. Produce an image of a flattened-out ground track on a non-rotating earth.
 Map (longitude, latitude) to (X,Y) coordinates in the image.
@@ -27,10 +28,23 @@ Map (longitude, latitude) to (X,Y) coordinates in the image.
 4. Produce an image of a flattened-out ground track on a rotating earth.
     - [code](llrotearth.go)
     - Go's `math.Remainder(float64, float64)` pivotal
-5. Figure out how to produce a [Hammer projection]() of the ground track
-on a non-rotating earth.
-6. Include the effects of a rotating earth on the Hammer projection ground track
+5. Figure out how to do a [Hammer projection]() of the ground track
+on a rotating earth.
+    - [code](llrotearthhammer.go)
 
 ### Coastline Data
 
 https://www.naturalearthdata.com/downloads/10m-physical-vectors/
+
+### Verifying Numerical Integration
+
+For a circular orbit, inclined or equatorial,
+the magnitude of the satellite's velocity should remain constant.
+
+![velocity magnitude for one orbit](velocity.png)
+
+A circular orbit should have a constant radius.
+
+![satellite's distance from center of earth for one orbit](orbital_radius.png)
+
+The orbit should form a closed circle.
