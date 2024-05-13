@@ -35,7 +35,7 @@ func main() {
 	dt := .250 // seconds
 
 	fmt.Printf("# t\tVx\tVy\tVz\tx\ty\tz\tr\tv\n")
-	for t = 0.0; t <= 7500; t += dt {
+	for t = 0.0; t <= 7200; t += dt {
 
 		r2 := X*X + Y*Y + Z*Z
 		r = math.Sqrt(r2)
