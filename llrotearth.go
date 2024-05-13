@@ -27,19 +27,20 @@ func main() {
 
 	Mearth := 5.97e24
 
+	GM1 := G * Mearth
+
 	// Initial conditions - 1075 mi circular orbit
-	X := 6.371e6 + 1730044.745 // meters
+	X := 6.371e6 + 1686870.745000 // meters
 	Y := 0.0
 	Z := 0.0
 
 	inclination := (66.5 / 360.) * 2.0 * math.Pi
 
 	// Velocities in meters/second
+	Vmag := math.Sqrt(GM1 / X)
 	Vx := 0.0
-	Vy := 7012.6 * math.Cos(inclination)
-	Vz := 7012.6 * math.Sin(inclination)
-
-	GM1 := G * Mearth
+	Vy := Vmag * math.Cos(inclination)
+	Vz := Vmag * math.Sin(inclination)
 
 	// 8.101e6 m orbit radius
 	// orbit circumference = 2*pi*8.101e6 = 5.09E7
@@ -48,7 +49,9 @@ func main() {
 	var intervalCount int
 	dt := .250 // seconds
 
-	for t = 0.0; t <= 86400.; t += dt {
+	max := 86400. // + 24.*36.
+
+	for t = 0.0; t <= max; t += dt {
 
 		r2 := X*X + Y*Y + Z*Z
 		r = math.Sqrt(r2)
