@@ -15,35 +15,36 @@ func main() {
 
 	Mearth := 5.97e24
 
+	GM1 := G * Mearth
+
 	// Initial conditions - 1075 mi circular orbit
-	X := 6.371e6 + 1730044.745 // meters
+	X := 6.371e6 + 1686870.745000 // meters
 	Y := 0.0
 	Z := 0.0
 
 	inclination := (66.5 / 360.) * 2.0 * math.Pi
 
 	// Velocities in meters/second
+	Vmag := math.Sqrt(GM1 / X)
 	Vx := 0.0
-	Vy := 7012.6 * math.Cos(inclination)
-	Vz := 7012.6 * math.Sin(inclination)
+	Vy := Vmag * math.Cos(inclination)
+	Vz := Vmag * math.Sin(inclination)
 
-	GM1 := G * Mearth
-
-	// 8.101e6 m orbit radius
-	// orbit circumference = 2*pi*8.101e6 = 5.09E7
-	// t = 5.09e7/7012.5 = 7258 sec
 	var t, r float64
 	var intervalCount int
 	dt := .250 // seconds
 
-	fmt.Printf("# t\tVx\tVy\tVz\tx\ty\tz\n")
-	for t = 0.0; t <= 86400; t += dt {
+	fmt.Printf("# t\tVx\tVy\tVz\tx\ty\tz\tr\tv\n")
+	for t = 0.0; t <= 7500; t += dt {
 
 		r2 := X*X + Y*Y + Z*Z
 		r = math.Sqrt(r2)
 
+		// magnitude of velocity
+		v := math.Sqrt(Vx*Vx + Vy*Vy + Vz*Vz)
+
 		if intervalCount%4 == 0 {
-			fmt.Printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", t, Vx, Vy, Vz, X, Y, Z, r)
+			fmt.Printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", t, Vx, Vy, Vz, X, Y, Z, r, v)
 		}
 		intervalCount++
 
