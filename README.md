@@ -38,13 +38,22 @@ https://www.naturalearthdata.com/downloads/10m-physical-vectors/
 
 ### Verifying Numerical Integration
 
-For a circular orbit, inclined or equatorial,
+- For a circular orbit, inclined or equatorial,
 the magnitude of the satellite's velocity should remain constant.
 
 ![velocity magnitude for one orbit](velocity.png)
 
-A circular orbit should have a constant radius.
+Minimum speed 7030 meters/second, maximum speed 7032 meters/second.
+That's pretty close to constant all the way around the orbit.
+
+- A circular orbit should have a constant radius.
 
 ![satellite's distance from center of earth for one orbit](orbital_radius.png)
 
-The orbit should form a closed circle.
+Minimum radius 8058750 meters, maximum radius 8056992,
+a difference of 1758 meters.
+
+I think this is an ellipse with eccentricity of 0.0002,
+which is pretty much a circle.
+
+- The orbit should form a closed circle.
