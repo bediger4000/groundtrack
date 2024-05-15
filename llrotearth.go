@@ -2,6 +2,9 @@ package main
 
 /*
  * Space station in 1075 mi high, circular orbit at 66.5 deg inclination.
+ *
+ * Ground track of 24 hours of orbit on a rotating earth,
+ * Map projection is longitude -> X, latitude -> Y
  */
 
 import (
