@@ -1,4 +1,5 @@
-IMAGES =  velocity.png orbital_radius.png
+IMAGES =  velocity.png orbital_radius.png llearth.gif rottrack.gif \
+		  	hammer_groundtrack.gif
 
 all: $(IMAGES)
 
@@ -19,6 +20,18 @@ llearth: llearth.go
 
 llearth.gif: llearth ne_10m_coastline.shp
 	./llearth ne_10m_coastline.shp > llearth.gif
+
+llrotearth: llrotearth.go
+	go build llrotearth.go
+
+rottrack.gif: llrotearth ne_10m_coastline.shp
+	./llrotearth ne_10m_coastline.shp > rottrack.gif
+
+llrotearthhammer: llrotearthhammer.go
+	go build llrotearthhammer.go
+
+hammer_groundtrack.gif: llrotearthhammer ne_10m_coastline.shp
+	./llrotearthhammer ne_10m_coastline.shp > hammer_groundtrack.gif
 
 velocity.png: circ.dat velocity.load
 	gnuplot < velocity.load
