@@ -2,6 +2,7 @@ package main
 
 /*
  * Space station in 1075 mi high, circular orbit at 66.5 deg inclination.
+ * Ensure that longitude/latitude transformation is correct.
  */
 
 import (
