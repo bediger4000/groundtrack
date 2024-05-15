@@ -2,6 +2,8 @@ package main
 
 /*
  * Space station in 1075 mi high, circular orbit at 66.5 deg inclination.
+ *
+ * Ground track of 24 hours of orbits, Hammer map projection
  */
 
 import (
