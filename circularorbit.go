@@ -18,6 +18,9 @@ func main() {
 	GM1 := G * Mearth
 
 	// Initial conditions - 1075 mi circular orbit
+	// 1075 mi * 5280 ft/mi * 1/3.281 m/ft = 1729960 m
+	// That makes a 7258 sec orbit, so a little less than
+	// 1075 miles
 	X := 6.371e6 + 1686870.745000 // meters
 	Y := 0.0
 	Z := 0.0
