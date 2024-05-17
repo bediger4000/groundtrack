@@ -1,5 +1,7 @@
 # Ground track of an earth orbiting satellite
 
+![Hammer projection map, plus 1075 mile circular orbit ground track](hammer_groundtrack_40.gif)
+
 I would like a ground track of Wernher von Braun's
 1952 Space Station from [Across the Space Frontier]().
 It's in a 1075 mile high, circular orbit inclined at 66.5&deg; to the equator.
