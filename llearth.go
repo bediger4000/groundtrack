@@ -59,7 +59,7 @@ func main() {
 		latitude := rtod * math.Atan2(Z, math.Sqrt(X*X+Y*Y))
 
 		if intervalCount%4 == 0 {
-			img.SetColorIndex(int(10.*(longitude+180.)), int(10.*(180.-latitude)), 2)
+			img.SetColorIndex(int(10.*(longitude+180.)), int(10.*(90.-latitude)), 2)
 		}
 		intervalCount++
 
@@ -100,7 +100,7 @@ func makeMap() *image.Paletted {
 	pal = append(pal, image.Black) // 1
 	pal = append(pal, red)         // 2
 
-	img := image.NewPaletted(image.Rectangle{image.Point{0, 0}, image.Point{3600, 3600}}, pal)
+	img := image.NewPaletted(image.Rectangle{image.Point{0, 0}, image.Point{3600, 1800}}, pal)
 	scale := 10.0
 
 	for shape.Next() {
@@ -109,7 +109,7 @@ func makeMap() *image.Paletted {
 		case *shp.PolyLine:
 			pl := p.(*shp.PolyLine)
 			for _, pt := range pl.Points {
-				img.SetColorIndex(int(scale*(pt.X+180.)), int(scale*(-pt.Y+180.)), 1)
+				img.SetColorIndex(int(scale*(pt.X+180.)), int(scale*(-pt.Y+90.)), 1)
 			}
 		}
 	}
